@@ -1,0 +1,20 @@
+{
+  "name": "jquery.zoomIt",
+  "version": "1.0.0",
+  "authors": [
+    "Yaniv-Kalfa <netameta1@yahoo.com>"
+  ],
+  "description": "Very small jquery pub sub implementation",
+  "main": "jquery.zoomIt.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
