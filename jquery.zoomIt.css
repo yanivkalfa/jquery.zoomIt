@@ -18,6 +18,7 @@ Default values in script:
     -moz-box-shadow: 10px 10px 5px #888;
     -webkit-box-shadow: 10px 10px 5px #888;
     box-shadow: 10px 10px 5px #888;
+    background:#fff;
 }
 /* big image loading class */
 .zoomIt_loading{
@@ -38,10 +39,27 @@ Default values in script:
     float:left;
     clear:both;
 }
-.zoomItcontainer .full-image {}
-.zoomItcontainer .full-image a.visible{
+
+.zoomItcontainer .full-image {
+    background: #fff;
+    box-shadow: 0px 2px 1px 0px;
+}
+.zoomItcontainer .full-image > a{
+    width: 100%;
+    position: relative;
+}
+.zoomItcontainer .full-image > a.visible{
     display:block;
 }
-.zoomItcontainer .full-image a.hidden{
+.zoomItcontainer .full-image > a.hidden{
     display:none;
+}
+.zoomItcontainer .full-image > a > img{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    max-height:100%;max-width:100%;
 }
