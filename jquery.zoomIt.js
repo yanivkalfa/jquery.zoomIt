@@ -30,8 +30,8 @@
             zoomAreaOpacity		: .5, // zoomed area opacity
             zoomDistance		: 10, // distance of the zoomer from the trigger
             // full image multipliers based on small preview image size
-            multiplierX			: 1.25, // how much of the big image width will be displayed
-            multiplierY			: 1.5, // how much of the big image height will be displayed
+            multiplierX			: 1.05, // how much of the big image width will be displayed
+            multiplierY			: 1.20, // how much of the big image height will be displayed
             // events
             init				: function(){},
             zoom				: function(){},
@@ -82,7 +82,7 @@
                 sizes = get_small_size();
 
             // Check if we have enough room on page to display the zoom.
-            if ($(document).width()-(sizes.width+options.zoomDistance) < options.multiplierX*sizes.width+options.zoomDistance ){return;}
+            if ($(document).width()-(sizes.widthP+options.zoomDistance) < options.multiplierX*sizes.widthP+options.zoomDistance ){return;}
 
             $(elems.zoomer).show().css({
                 'top' : sizes.zTop,
@@ -123,8 +123,8 @@
                     fullHeight 	= fullImg.height(),
                     ratioX 		= fullWidth / sizes.width,
                     ratioY 		= fullHeight / sizes.height,
-                    dw 			= sizes.width / ratioX * ( options.multiplierX||1 ),
-                    dh 			= sizes.height / ratioY * ( options.multiplierY||1 );
+                    dw 			= sizes.width / ratioX * ( options.multiplierX  || 1 ),
+                    dh 			= sizes.height / ratioY * ( options.multiplierY || 1 );
 
                 // if image doesn't need zooming according to multiplier, set full img container size to image size
                 if( options.multiplierX > ratioX && options.multiplierY > ratioY ){
@@ -174,25 +174,28 @@
                         }
 
                         var sizes = get_small_size(),
-                            mX = mouseX - sizes.left - dw/2,
-                            mY = mouseY - sizes.top - dh/2;
+                            padLeft = sizes.left-sizes.leftP,
+                            padTop = sizes.top-sizes.topP,
+                            mX = mouseX - sizes.left + (padLeft)-(dw/2),
+                            mY = mouseY - sizes.top + (padTop)-(dh/2);
 
                         // horizontal left limit
                         if( mouseX < sizes.left + dw/2 ){
-                            mX = 0;
+                            mX = padLeft;
                         }
                         // vertical top limit
                         if( mouseY < sizes.top + dh/2 ){
-                            mY = 0;
+                            mY = padTop;
                         }
                         // horizontal right limit
                         if( mouseX > ( sizes.left + sizes.width - dw/2 )){
-                            mX = sizes.width - dw;
+                            mX = sizes.left + sizes.width - dw - sizes.leftP;
                         }
                         // vertical bottom limit
                         if( mouseY > ( sizes.top + sizes.height - dh/2 )){
-                            mY = sizes.height - dh;
+                            mY = sizes.top + sizes.height - dh - sizes.topP;
                         }
+
 
                         // move zoomed area
                         $(elems.preview).css({
@@ -202,8 +205,8 @@
 
                         // move full image
                         fullImg.css({
-                            'left'	: -(mX * ratioX),
-                            'top'	: -(mY * ratioY)
+                            'left'	: -((mX-padLeft) * ratioX),
+                            'top'	: -((mY-padTop) * ratioY)
                         });
                     })
                 }
@@ -229,28 +232,34 @@
         var set_small_size = function(){
 
             var position = $(smallImg[0]).offset(),
+                positionParent = $(smallImg[0]).parent().offset(),
                 data = {
                     'width' 	: $(smallImg[0]).outerWidth(),
                     'height' 	: $(smallImg[0]).outerHeight(),
                     'top' 		: position.top,
                     'left' 		: position.left,
-                    'zTop' 		: position.top,
-                    'zLeft' 	: position.left
+                    'widthP' 	: $(smallImg[0]).parent().outerWidth(),
+                    'heightP' 	: $(smallImg[0]).parent().outerHeight(),
+                    'topP' 		: positionParent.top,
+                    'leftP' 	: positionParent.left,
+                    'zTop' 		: positionParent.top,
+                    'zLeft' 	: positionParent.left
                 };
+
             // make some position calculations based on position option
             switch( options.zoomPosition ){
                 case 'right':
                 default:
-                    data.zLeft += data.width + options.zoomDistance;
+                    data.zLeft += data.widthP + options.zoomDistance;
                     break;
                 case 'left':
-                    data.zLeft -= data.width * ( options.multiplierX || 1 ) + options.zoomDistance;
+                    data.zLeft -= data.widthP * ( options.multiplierX || 1 ) + options.zoomDistance;
                     break;
                 case 'bottom':
-                    data.zTop += data.height + options.zoomDistance;
+                    data.zTop += data.heightP + options.zoomDistance;
                     break;
                 case 'top':
-                    data.zTop -= data.height * ( options.multiplierY || 1 ) + options.zoomDistance;
+                    data.zTop -= data.heightP * ( options.multiplierY || 1 ) + options.zoomDistance;
                     break;
             }
 
@@ -288,8 +297,8 @@
                     'position'	: 'absolute',
                     'top'		: -1000,
                     'overflow'	: 'hidden',
-                    'width' 	: sizes.width * ( options.multiplierX || 1 ),
-                    'height' 	: sizes.height * ( options.multiplierY || 1 ),
+                    'width' 	: sizes.widthP * ( options.multiplierX || 1 ),
+                    'height' 	: sizes.heightP * ( options.multiplierY || 1 ),
                     'z-index'	: 1050
                 }
             }).appendTo( $(document.body) );
