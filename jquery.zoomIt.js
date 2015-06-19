@@ -1,9 +1,6 @@
 /**
- * Author: Constantin Boiangiu (services[at]constantinb.com)
- * Homepage: http://www.constantinb.com/project/jquery-image-zoom-zoomit/
- * Forum : http://www.constantinb.com/forums/forum/jquery-zoomit-plugin/
+ * Author: Constantin Boiangiu, Modified by SK.
  * jQuery version: 1.6
- * Copyright (c) author
  * License: MIT (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -221,7 +218,7 @@
 
         var closeZoom = function(){
             var elems = get_preview_areas();
-            $(elems.zoomer).css({
+            $(elems.zoomer).hide().css({
                 'top' : -5000,
                 'left': -5000
             });
